@@ -20,18 +20,23 @@ soup = BeautifulSoup(r.content,"html.parser")
 #     links = href.get('href')
 
 bot = telebot.TeleBot('5446917926:AAGNVWK7cjTyy5Zt4rq-YOyy_aYfdLC3bvs')
+catalogo = soup.find_all("div", {"class":"catalog-product-item"})
 
 #bot de telegram
 @bot.message_handler(commands=['producto'])
 def pedirProducto(msg):
-    bot.reply_to(msg,"Mira esto:\n" + title+ '\n' + f"  {'Solo a : '+str(price)}\n" + 'https://simple.ripley.cl' + links )
+    title  = soup.find('div',{'class':'catalog-product-details__name'}).text
+    price = soup.find('li',{'class':'catalog-prices__offer-price'}).text
+    links = soup.find('a',{'class': 'catalog-product-item__container'}, href=True)
+    bot.reply_to(msg,"Mira esto:\n" + title+ '\n' + f"  {'Solo a : '+str(price)}\n" + 'https://simple.ripley.cl' + links.get('href') )
     
 @bot.message_handler(commands=['productos'])
 def pedirProducto(msg):
-    for i in soup.find_all("div", {"class":"catalog-product-item"}):
+    for i in catalogo:
         title  = i.find('div',{'class':'catalog-product-details__name'}).text
         price = i.find('li',{'class':'catalog-prices__offer-price'}).text
         links = i.find('a',{'class': 'catalog-product-item__container'}, href=True)
+
         bot.reply_to(msg,"Mira esto:\n" + title+ '\n' + f"  {'Solo a : '+str(price)}\n" + 'https://simple.ripley.cl' + links.get('href'))
      
         
