@@ -26,23 +26,16 @@ bot = telebot.TeleBot('5446917926:AAGNVWK7cjTyy5Zt4rq-YOyy_aYfdLC3bvs')
 def pedirProducto(msg):
     bot.reply_to(msg,"Mira esto:\n" + title+ '\n' + f"  {'Solo a : '+str(price)}\n" + 'https://simple.ripley.cl' + links )
     
-# @bot.message_handler(commands=['productos'])
-# def pedirProducto(msg):
-#     for i in catalogo, links:
-#         title  = i.find('div',{'class':'catalog-product-details__name'}).text
-#         price = i.find('li',{'class':'catalog-prices__offer-price'}).text
-#         # link = href.get('href')
-#         #bot.reply_to(msg,"Mira esto:\n" + title+ '\n' + f"  {'Solo a : '+str(price)}\n" + 'https://simple.ripley.cl' + links)
-#         print([link])
-        
-for i in soup.find_all("div", {"class":"catalog-product-item"}):
+@bot.message_handler(commands=['productos'])
+def pedirProducto(msg):
+    for i in soup.find_all("div", {"class":"catalog-product-item"}):
         title  = i.find('div',{'class':'catalog-product-details__name'}).text
         price = i.find('li',{'class':'catalog-prices__offer-price'}).text
-        lenks = i.find('a',{'class': 'catalog-product-item'}, href=True)
-        links = i.get('href')
-        #bot.reply_to(msg,"Mira esto:\n" + title+ '\n' + f"  {'Solo a : '+str(price)}\n" + 'https://simple.ripley.cl' + links)
-        print([lenks])
+        links = i.find('a',{'class': 'catalog-product-item__container'}, href=True)
+        bot.reply_to(msg,"Mira esto:\n" + title+ '\n' + f"  {'Solo a : '+str(price)}\n" + 'https://simple.ripley.cl' + links.get('href'))
+     
         
+   
     
 bot.infinity_polling() 
  
